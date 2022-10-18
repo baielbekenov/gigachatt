@@ -175,16 +175,9 @@ Website: http://emilcarlsson.se/
 				 <i class="fa fa-instagram" aria-hidden="true"></i>
 			</div>
 		</div>
-		<div class="messages">
-			<ul>
-				<li class="sent">
-					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-				</li>
-				<li class="replies">
-					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-					<p>When you're backed against the wall, break the god damn thing down.</p>
-				</li>
+		<div  class="messages">
+			<ul id="messages">
+
 				<li class="replies">
 					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
 					<p>Excuses don't win championships.</p>
@@ -201,27 +194,83 @@ Website: http://emilcarlsson.se/
 					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
 					<p>What are your choices when someone puts a gun to your head?</p>
 				</li>
-				<li class="sent">
-					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-					<p>What are you talking about? You do what they say or they shoot you.</p>
-				</li>
-				<li class="replies">
-					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-					<p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-				</li>
+
 			</ul>
 		</div>
 		<div class="message-input">
 			<div class="wrap">
-			<input type="text" placeholder="Write your message..." />
-			<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+<!--				<form id="form">-->
+<!--					<input type="text" name="message" placeholder="Write your message..." />-->
+<!--					<i class="fa fa-paperclip attachment" aria-hidden="true"></i>-->
+<!--					<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>-->
+<!--				</form>-->
+				<form id="form">
+					<input type="text" name="message" />
+					<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				</form>
 			</div>
+			<script type="text/javascript">
+					let url = `ws://${window.location.host}/ws/socket-server${window.location.pathname}`
+
+					const chatSocket = new WebSocket(url)
+
+					chatSocket.onmessage = function(e){
+						let data = JSON.parse(e.data)
+						console.log('Data:', data)
+
+						let user1 = '{{ user }}'
+						let user2 = data.user
+						let lol = 'true'
+						var lord
+						if(String(user1) == String(user2)){
+							console.log('True')
+							lord = 'true'
+						}
+						console.log(user1, user2, lord)
+						if(lol===lord){
+							console.log('true')
+							messages.insertAdjacentHTML('beforeend', `
+							<li class="replies" id="${data.user}, ${user1}">
+								<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+								<p>${data.message}</p>
+							</li>
+							`)
+						}else{
+						console.log('false')
+						messages.insertAdjacentHTML('beforeend', `
+							<li class="sent">
+								<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+								<p>${data.message}</p>
+							</li>
+							`)
+						}
+
+					}
+
+					let form = document.getElementById('form')
+
+					form.addEventListener('submit', (e) => {
+						e.preventDefault()
+
+						let message = e.target.message.value
+						let user = '{{ user }}'
+						console.log('Data:', message)
+						console.log(user)
+						chatSocket.send(JSON.stringify({
+							'message': message,
+							'user': user
+						}))
+						form.reset()
+
+					})
+</script>
 		</div>
 	</div>
 </div>
+
 <!-- partial -->
-  <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script><script  src="./script.js"></script>
+  	<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+	<script  src="{% static '/scrippt.js' %}"></script>
 
 </body>
 </html>
