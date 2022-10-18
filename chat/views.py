@@ -7,6 +7,7 @@ from .forms import UserRegisterForm
 def index(request):
     return render(request, 'index.html')
 
+<<<<<<< HEAD
 
 def register(request):
     if request.user.is_authenticated:
@@ -51,3 +52,7 @@ def loginpage(request):
 def logoutpage(request):
     logout(request)
     return redirect('login')
+=======
+def index2(request, pk):
+    return render(request, 'index.html')
+>>>>>>> 9ed58853aef5197b880d5c1837bcfecdcf04e130

@@ -25,12 +25,14 @@ SECRET_KEY = 'django-insecure-w41_5ivjyvm4zd-p=*4!&im3gg)w7gy0)3p)us2zo-d64(!!8#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +43,14 @@ INSTALLED_APPS = [
     # local apps
     'chat'
 ]
+
+ASGI_APPLICATION = 'gigachat.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
