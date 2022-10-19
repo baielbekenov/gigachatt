@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import User
+from .models import User, Feedback
 
 
 class UserRegisterForm(UserCreationForm):
@@ -18,5 +18,17 @@ class UserRegisterForm(UserCreationForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+
+        }
+
+
+class FeedbackForm(ModelForm):
+
+    class Meta:
+        model = Feedback
+        fields = '__all__'
+        widgets = {
+            'content': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
 
         }

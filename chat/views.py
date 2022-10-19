@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, FeedbackForm
+from .models import Feedback
 
 
 def index(request):
@@ -55,4 +56,21 @@ def logoutpage(request):
 
 def index2(request, pk):
     return render(request, 'index.html')
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = FeedbackForm()
+    content = {'form': form}
+    return render(request, 'feedback.html', content)
+
+def feedbacklist(request):
+    if request.method == 'GET':
+        feedback = Feedback.objects.all()
+
+        context = {'feedback': feedback}
+        return render(request, 'feedbacklist.html', context)
 
